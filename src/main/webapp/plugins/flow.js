@@ -76,6 +76,23 @@ Draw.loadPlugin(function(ui)
 		updateLine(cells);
 	});
 
+	function removeStyle(style,name){
+		if(!style){
+			return "";
+		}
+		var styles = style.split(";");
+		var ret = [];
+		for(var i = 0; i < styles.length; i ++){
+			var styleKV = styles[i].split("=");
+
+			if(styleKV[0]!==name){
+				ret.push(styles[i]);
+			}
+		}
+		return ret.join(";");
+
+	}
+
 
 
 	//
@@ -98,7 +115,7 @@ Draw.loadPlugin(function(ui)
 						if (paths[1].getAttribute('class') == 'mxEdgeFlow')
 						{
 							paths[1].removeAttribute('class');
-							// style = mxUtils.removeStylename(style, stylenames[j]);
+							style = removeStyle(style, "mxEdgeFlow");
 							if (mxUtils.getValue(state.style, mxConstants.STYLE_DASHED, '0') != '1')
 							{
 								paths[1].removeAttribute('stroke-dasharray');
@@ -122,7 +139,7 @@ Draw.loadPlugin(function(ui)
 	};
 	
 	// Adds action
-	ui.actions.addAction('动态线', function()
+	ui.actions.addAction('toggleFlow', function()
 	{
 		var cell = ui.editor.graph.getSelectionCell();
 		
