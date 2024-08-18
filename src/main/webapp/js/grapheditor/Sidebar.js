@@ -4101,6 +4101,127 @@ Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height,
 	return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted,
 		showTooltip, clickFn, thumbWidth, thumbHeight, icon, startEditing, sourceCell);
 };
+/**
+ * 
+ */
+Sidebar.prototype.createVertexTemplateFromSvg = function(svgString, width, height, title, showLabel,
+	showTitle, allowCellsInserted, showTooltip, clickFn, thumbWidth, thumbHeight, icon, startEditing,
+	sourceCell)
+{
+	var parser = new DOMParser();
+	var svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+
+	// 获取SVG元素
+	var svgElement = svgDoc.querySelector('svg');
+
+	function svgElementToMxCell(element, idPrefix) {
+		if(element == null){
+			return null;
+		}
+		if(element.getAttribute == null){
+			console.info(123);
+		}
+        // 获取元素ID
+        var id = element.getAttribute('id') || `${idPrefix}_${element.tagName.toLowerCase()}`;
+        
+        // 创建mxCell
+        var geometry = new mxGeometry(0, 0, 0, 0);
+        var style = 'strokeWidth=2;fillColor=none;strokeColor=black;';
+
+        switch (element.tagName.toLowerCase()) {
+            case 'circle':
+                var cx = parseFloat(element.getAttribute('cx'));
+                var cy = parseFloat(element.getAttribute('cy'));
+                var r = parseFloat(element.getAttribute('r'));
+                geometry = new mxGeometry(cx - r, cy - r, 2 * r, 2 * r);
+                style += 'ellipse;fillColor=' + element.getAttribute('fill') + ';strokeColor=' + element.getAttribute('stroke') + ';';
+                break;
+            case 'rect':
+                var x = parseFloat(element.getAttribute('x'));
+                var y = parseFloat(element.getAttribute('y'));
+                var width = parseFloat(element.getAttribute('width'));
+                var height = parseFloat(element.getAttribute('height'));
+                geometry = new mxGeometry(x, y, width, height);
+                style += 'rectangle;fillColor=' + element.getAttribute('fill') + ';strokeColor=' + element.getAttribute('stroke') + ';';
+                break;
+            case 'path':
+                var d = element.getAttribute('d');
+                var pathCommands = parsePath(d);
+                var mxCell = createMxCellFromPath( pathCommands, id);
+                return mxCell;
+            case 'g':
+                var transform = element.getAttribute('transform');
+                var transformMatrix = mxSvgUtil.parseTransform(transform);
+                var children = element.children;
+                for (let i = 0; i < children.length; i++) {
+                    svgElementToMxCell(graph, children[i], idPrefix);
+                }
+                return null;
+            default:
+                console.log('Unsupported element:', element.tagName);
+                return null;
+        }
+
+        var cell = new mxCell(id, geometry, style);
+        return cell;
+    }
+	function parsePath(pathString) {
+        var pathCommands = pathString.match(/([A-Za-z])?([-+]?(?:\d*\.\d+|\d+))(?:\s+|$)/g);
+        return pathCommands;
+    }
+	function createMxCellFromPath( pathCommands, id) {
+        var geometry = new mxGeometry(0, 0, 0, 0);
+        var style = 'shape=path;strokeWidth=2;fillColor=none;strokeColor=black;html=1;';
+        var vertex = new mxCell(id, geometry, style);
+
+        // 处理路径命令
+        pathCommands.forEach(function(command) {
+            var parts = command.split(/\s+/);
+            var cmd = parts[0];
+            var points = parts.slice(1).map(Number);
+
+            switch (cmd) {
+                case 'M':
+                case 'm':
+                    geometry.x = points[0];
+                    geometry.y = points[1];
+                    break;
+                case 'L':
+                case 'l':
+                    if (geometry.width === 0 && geometry.height === 0) {
+                        geometry.width = points[0] - geometry.x;
+                        geometry.height = points[1] - geometry.y;
+                    } else {
+                        geometry.width = Math.max(geometry.width, points[0] - geometry.x);
+                        geometry.height = Math.max(geometry.height, points[1] - geometry.y);
+                    }
+                    break;
+                default:
+                    console.log('Unsupported command: ' + cmd);
+                    break;
+            }
+        });
+
+        // 更新几何形状
+        vertex.geometry = geometry;
+		return vertex;
+	}
+	var children = svgElement.children;
+	var cells = []
+	for(var i = 0; i < children.length; i ++){
+		if(children[i].tagName == null){
+			continue;
+		}
+		var cell = svgElementToMxCell(children[i],children[i].tagName);
+		cells.push(cells);
+
+	}
+	
+	return this.createVertexTemplateFromCells(cells,width, height, title, showLabel,
+		showTitle, allowCellsInserted, showTooltip, clickFn, thumbWidth, thumbHeight, icon, startEditing,
+		sourceCell);
+};
+
 
 /**
  * 

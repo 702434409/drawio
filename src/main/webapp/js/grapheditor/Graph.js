@@ -1831,6 +1831,9 @@ Graph.decompress = function(data, inflate, checked)
 	}
 	else
 	{
+		if(data.indexOf("mxGraphModel")>=0 || data.indexOf("mxCell")>=0){
+			return data;
+		}
 		var tmp = Graph.stringToArrayBuffer(atob(data));
 		var inflated = decodeURIComponent((inflate) ?
 			pako.inflate(tmp, {to: 'string'}) :

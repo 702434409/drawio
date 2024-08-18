@@ -213,6 +213,18 @@ mxStylesheet.prototype.getCellStyle = function(name, defaultStyle, resolve)
 	{
 		var pairs = name.split(';');
 
+		//纠正base64的分号;拆分问题-cjh
+		var copyPairs = [];
+		for(var i = 0; i < pairs.length-1; i++){
+			if(pairs[i].indexOf("image=data:")==0 && pairs[i+1].indexOf("base64,")==0){
+				copyPairs.push(pairs[i]+";"+pairs[i+1]);
+				i ++;
+			}else{
+				copyPairs.push(pairs[i]);
+			}
+		}
+		pairs = copyPairs;
+
 		if (style != null && name.charAt(0) != ';')
 		{
 			style = mxUtils.clone(style);

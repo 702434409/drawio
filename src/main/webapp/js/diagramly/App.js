@@ -319,7 +319,6 @@ App.startTime = new Date();
  */
 App.pluginRegistry = {'4xAKTrabTpTzahoLthkwPNUn': 'plugins/explore.js',
 	'ex': 'plugins/explore.js',
-	'flow': 'plugins/flow.js',
 	'ac': 'plugins/connect.js', 'acj': 'plugins/connectJira.js',
 	'ac148': 'plugins/cConf-1-4-8.js', 'ac148cmnt': 'plugins/cConf-comments.js', 
 	'nxtcld': 'plugins/nextcloud.js',
@@ -337,7 +336,6 @@ App.pluginRegistry = {'4xAKTrabTpTzahoLthkwPNUn': 'plugins/explore.js',
 
 App.publicPlugin = [
 	'ex',
-	'flow',
 	'tips',
 	'svgdata',
 	'number',

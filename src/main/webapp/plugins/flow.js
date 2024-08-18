@@ -8,7 +8,7 @@ Draw.loadPlugin(function(ui)
 	
 	// Max number of edges per page
 	var pageSize = 20;
-
+	
 	// var uiCreatePopupMenu = ui.menus.createPopupMenu;
 	// ui.menus.createPopupMenu = function(menu, cell, evt)
 	// {
