@@ -334,45 +334,31 @@ mxStencilRegistry.allowEval = false;
 			action: 'loadCustomIcon',
 			filePath: ""
 		});
-		if (editorUi.sidebar != null)
+		if (editorUi.sidebar != null && ret)
 		{
-			// Adds custom sidebar entry
-			editorUi.sidebar.addPalette('CustomIcons', 'CustomIcons', true, function(content) {
-				if(ret != null){
-					for(var i = 0; i < ret.length; i ++){
-						var item = editorUi.sidebar.createVertexTemplateFromData(ret[i], 100, 100);
-						content.appendChild(item);
-						// var doc = mxUtils.parseXml(ret[i]);
-						// var codec = new mxCodec(doc);
-
-						// var model = new mxGraphModel();
-						// codec.decode(doc.documentElement, model);
-						// var xxx = editorUi.sidebar.createVertexTemplateFromCells([model.root.getChildAt(0)], 100, 100)
-						// content.appendChild(xxx);
-
-						// console.info("自定义图标",ret[i]);
-						// const svgData = 'data:image/svg+xml,' + btoa(ret[i]);
-						// var style = 'shape=image;image=' + btoa(ret[i]);
-						// console.info("ssss0",style);
-						// var doc = mxUtils.parseXml(ret[i]); // parse XML into document
-						// var graph = new Graph(null, null, null, null, null); // create Graph instance, container is an HTML element where the SVG will be exported
-						// var outputSvg = graph.getSvg("#FFFFFF", 1, null, null, true, null, null);
-						// // graph.cellRenderer.createCell
-						// var mxCell = new mxCell();
-						// var svgElement = mxUtils.parseXml(ret[i]);
-						// mxCell.value = svgElement; // 将SVG元素复制并作为单元格的值
-						// mxCell.geometry = new mxGeometry(0, 0, svgElement.clientWidth, svgElement.clientHeight); // 创建对应的几何形状
-						// return mxCell;
-						// // content.appendChild(editorUi.sidebar.createVertexTemplateFromCells(mxCell, 100, 100));
-						// content.appendChild(editorUi.sidebar.createVertexTemplate(style, 100, 100));
+			for(var key in ret){
+				var iconArr = ret[key];
+				// Adds custom sidebar entry
+				editorUi.sidebar.addPalette(key, key=="CustomIcon"?"未分组图标":key, true, function(content) {
+					if(iconArr != null){
+						for(var i = 0; i < iconArr.length; i ++){
+							var item = editorUi.sidebar.createVertexTemplateFromData(iconArr[i], 100, 100);
+							content.appendChild(item);
+							
+						}
 					}
-				}
-				// content.appendChild(ui.sidebar.createVertexTemplate(null, 120, 60));
-				// content.appendChild(ui.sidebar.createVertexTemplate('shape=image;image=http://download.esolia.net.s3.amazonaws.com/img/eSolia-Logo-Color.svg;resizable=0;movable=0;rotatable=0', 100, 100));
-				// content.appendChild(ui.sidebar.createVertexTemplate('text;spacingTop=-5;fontFamily=Courier New;fontSize=8;fontColor=#999999;resizable=0;movable=0;rotatable=0', 100, 100));
-				// content.appendChild(ui.sidebar.createVertexTemplate('rounded=1;whiteSpace=wrap;gradientColor=none;fillColor=#004C99;shadow=1;strokeColor=#FFFFFF;align=center;fontColor=#FFFFFF;strokeWidth=3;fontFamily=Courier New;verticalAlign=middle', 100, 100));
-				// content.appendChild(ui.sidebar.createVertexTemplate('curved=1;strokeColor=#004C99;endArrow=oval;endFill=0;strokeWidth=3;shadow=1;dashed=1', 100, 100));
-			});
+				});
+			}
+			// // Adds custom sidebar entry
+			// editorUi.sidebar.addPalette('CustomIcons', 'CustomIcons', true, function(content) {
+			// 	if(ret != null){
+			// 		for(var i = 0; i < ret.length; i ++){
+			// 			var item = editorUi.sidebar.createVertexTemplateFromData(ret[i], 100, 100);
+			// 			content.appendChild(item);
+						
+			// 		}
+			// 	}
+			// });
 		}
 		
 

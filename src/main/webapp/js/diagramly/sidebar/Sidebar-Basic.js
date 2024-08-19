@@ -1,6 +1,6 @@
 (function()
 {
-	Sidebar.prototype.addBasicPalette = function()
+	Sidebar.prototype.addBasicPalette11 = function()
 	{
 		var w = 100;
 		var h = 100;
